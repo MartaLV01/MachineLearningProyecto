@@ -1,0 +1,48 @@
+
+2Var: 3 predictores más constante
+modelo   conjunto     variante    n      R2   RMSE    MAE
+  2Var      train     original 1252  0.4490 1.3653 0.9421
+  2Var      train         lag1 1252  0.9773 0.2770 0.1846
+  2Var      train persistencia 1252  0.9762 0.2835 0.1771
+  2Var validacion     original  433 -0.0730 1.1690 0.8999
+  2Var validacion         lag1  433  0.9623 0.2190 0.1479
+  2Var validacion persistencia  433  0.9687 0.1997 0.1363
+  2Var       test     original  461 -0.3705 1.3044 0.7655
+  2Var       test         lag1  461  0.9799 0.1581 0.1181
+  2Var       test persistencia  461  0.9799 0.1578 0.1097
+
+4Var_Inflacion: 5 predictores más constante
+        modelo   conjunto     variante    n      R2   RMSE    MAE
+4Var_Inflacion      train     original 1252  0.5525 1.2304 0.8672
+4Var_Inflacion      train         lag1 1252  0.9791 0.2656 0.1744
+4Var_Inflacion      train persistencia 1252  0.9762 0.2835 0.1771
+4Var_Inflacion validacion     original  433 -0.5096 1.3866 0.9535
+4Var_Inflacion validacion         lag1  433  0.9687 0.1996 0.1462
+4Var_Inflacion validacion persistencia  433  0.9687 0.1997 0.1363
+4Var_Inflacion       test     original  461 -1.9430 1.9115 1.5773
+4Var_Inflacion       test         lag1  461  0.9779 0.1655 0.1178
+4Var_Inflacion       test persistencia  461  0.9799 0.1578 0.1097
+
+4Var_Produccion: 5 predictores más constante
+         modelo   conjunto     variante    n      R2   RMSE    MAE
+4Var_Produccion      train     original 1252  0.4602 1.3514 0.9427
+4Var_Produccion      train         lag1 1252  0.9775 0.2762 0.1836
+4Var_Produccion      train persistencia 1252  0.9762 0.2835 0.1771
+4Var_Produccion validacion     original  433 -0.0181 1.1387 0.8692
+4Var_Produccion validacion         lag1  433  0.9624 0.2189 0.1478
+4Var_Produccion validacion persistencia  433  0.9687 0.1997 0.1363
+4Var_Produccion       test     original  461 -0.2957 1.2683 0.7420
+4Var_Produccion       test         lag1  461  0.9798 0.1584 0.1181
+4Var_Produccion       test persistencia  461  0.9799 0.1578 0.1097
+
+6Var: 7 predictores más constante
+modelo   conjunto     variante    n      R2   RMSE    MAE
+  6Var      train     original 1252  0.5529 1.2299 0.8673
+  6Var      train         lag1 1252  0.9792 0.2656 0.1743
+  6Var      train persistencia 1252  0.9762 0.2835 0.1771
+  6Var validacion     original  433 -0.4823 1.3739 0.9455
+  6Var validacion         lag1  433  0.9687 0.1995 0.1455
+  6Var validacion persistencia  433  0.9687 0.1997 0.1363
+  6Var       test     original  461 -1.8966 1.8964 1.5654
+  6Var       test         lag1  461  0.9782 0.1644 0.1169
+  6Var       test persistencia  461  0.9799 0.1578 0.1097

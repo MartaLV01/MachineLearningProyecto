@@ -1,0 +1,4 @@
+conjunto,n_original,n_con_retardo,excluidas_sin_retardo,inicio_original,fin_original,inicio_utilizado,fin_utilizado
+train,1293,1252,41,2010-06-30,2023-07-31,2010-07-31,2023-07-31
+validacion,434,433,1,2023-08-31,2024-12-31,2023-08-31,2024-12-31
+test,463,461,2,2025-01-31,2026-07-31,2025-01-31,2026-07-31
