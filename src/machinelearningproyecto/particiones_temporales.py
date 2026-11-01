@@ -12,7 +12,7 @@ import pandas as pd
 
 def leer_excel():
 # Leer el archivo especificando la hoja correcta: 'Regresion'
-    df = pd.read_excel('../../data/euribor_datos.xlsx', sheet_name='Regresion', header=5)
+    df = pd.read_excel('../../../data/euribor_datos.xlsx', sheet_name='Regresion', header=5)
     return df
     #df.head(10)
     #print(df.head(5))
@@ -132,7 +132,7 @@ def separacion_variables_entrenamiento(features, target, variables_pais):
     print(resumen_folds.to_string())
 
 
-    return X_train, y_train, X_val, y_val, X_test, y_test, X_cv, y_cv
+    return X_train, y_train, X_val, y_val, X_test, y_test, X_cv, y_cv, folds
 
 
 
