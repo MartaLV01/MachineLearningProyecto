@@ -6,13 +6,16 @@ Configura features y target para que coincidan con tu regresión.
 """
 import numpy as np
 import pandas as pd
+from pathlib import Path
+
+from machinelearningproyecto.variacion_rendimiento_bce import COLUMNA, añadir_variacion
 
 # TODO 1: organizarlo en funciones
 # TODO 2: que cada una de las files que haga un modelo importe estas funciones
 
 def leer_excel():
 # Leer el archivo especificando la hoja correcta: 'Regresion'
-    df = pd.read_excel('../../data/euribor_datos.xlsx', sheet_name='Regresion', header=5)
+    df = pd.read_excel(Path(__file__).resolve().parents[2] / 'data' / 'euribor_datos.xlsx', sheet_name='Regresion', header=5)
     return df
     #df.head(10)
     #print(df.head(5))
@@ -37,8 +40,10 @@ features = [
 target = 'Rendimiento BCE'  # O: 'Bono soberano 10 años (% anual)'
 variables_pais = features + ['País ISO']
 
-def separacion_variables_entrenamiento(features, target, variables_pais):
+def separacion_variables_entrenamiento(features, target, variables_pais, *, devolver_folds=False):
     df = leer_excel()
+    if target == COLUMNA:
+        df = añadir_variacion(df)
     # 1. Preparación: conservar juntos todos los países del mismo mes.
     datos = df[['Fecha'] + variables_pais + [target]].copy()
     datos['Fecha'] = pd.to_datetime(datos['Fecha'], dayfirst=True, errors='coerce')
@@ -79,8 +84,8 @@ def separacion_variables_entrenamiento(features, target, variables_pais):
 
     # 4. Cinco bloques originales: meses consecutivos y filas similares.
     # Son una evaluación alternativa a la división anterior sobre train_val.
-    # ATENCIÓN: entrenar con los otros cuatro bloques incluye datos futuros en
-    # los folds 1–4. Se conserva el KFold original, no una ventana expansiva.
+    # El primer bloque solo aporta entrenamiento; los cuatro siguientes
+    # se validan con todos los bloques anteriores (ventana expansiva).
     n_splits = 5
     acumulado = conteo.cumsum().to_numpy()
     cortes = []
@@ -103,9 +108,10 @@ def separacion_variables_entrenamiento(features, target, variables_pais):
     # Índices POSICIONALES para usar con iloc o cv=folds en scikit-learn.
     X_cv, y_cv = train_val[features], train_val[target]
     folds = []
-    for numero in range(1, n_splits + 1):
-        mascara = train_val['Fold'].eq(numero).to_numpy()
-        folds.append((np.flatnonzero(~mascara), np.flatnonzero(mascara)))
+    for numero in range(2, n_splits + 1):
+        entrenamiento = train_val['Fold'].lt(numero).to_numpy()
+        validacion = train_val['Fold'].eq(numero).to_numpy()
+        folds.append((np.flatnonzero(entrenamiento), np.flatnonzero(validacion)))
 
     # Uso junto a tu regresión (sin entrenar nada aquí):
     # for numero, (idx_train, idx_val) in enumerate(folds, start=1):
@@ -114,7 +120,7 @@ def separacion_variables_entrenamiento(features, target, variables_pais):
     #     ... ajustar un modelo nuevo y evaluar este fold ...
     # Los índices de folds corresponden a X_cv/y_cv, no a X_train/y_train.
     # La validación final comparte datos con los folds: no es un holdout
-    # independiente si ya se usaron los cinco folds para seleccionar el modelo.
+    # independiente si ya se usaron los folds para seleccionar el modelo.
 
     # 5. Mostrar claramente las divisiones, sin guardar archivos ni ajustar modelos.
     resumen_division = pd.DataFrame([
@@ -132,7 +138,8 @@ def separacion_variables_entrenamiento(features, target, variables_pais):
     print(resumen_folds.to_string())
 
 
-    return X_train, y_train, X_val, y_val, X_test, y_test, X_cv, y_cv
+    resultado = (X_train, y_train, X_val, y_val, X_test, y_test, X_cv, y_cv)
+    return (*resultado, folds) if devolver_folds else resultado
 
 
 

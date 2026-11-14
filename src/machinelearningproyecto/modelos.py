@@ -83,3 +83,71 @@ def model_OLS(X_train, y_train, X_val, y_val, X_test, y_test, X_cv, y_cv):
     print("\n", tabla_coeficientes)
     print(tabla_metricas)
     print(tabla_validacion)
+
+def model_DecisionTree(
+    X_train, y_train, X_val, y_val, X_test, y_test, X_cv, y_cv,
+    *, max_depth=5, min_samples_leaf=5,
+    min_samples_split=2, ccp_alpha=0.0, random_state=42, evaluar_test=False,
+):
+    """Ajustar un árbol de regresión con la misma entrada que model_OLS.
+
+    Sólo se entrena con train; se respetan las particiones recibidas.
+    X_cv e y_cv se aceptan por compatibilidad, sin realizar validación cruzada.
+    El test se evalúa únicamente si evaluar_test=True, tras elegir el modelo.
+    Las variables deben ser numéricas; País ISO requiere codificación previa.
+
+    Devuelve el estimador, las métricas, predicciones, errores e importancias.
+    """
+    from sklearn.tree import DecisionTreeRegressor
+
+    modelo = DecisionTreeRegressor(
+        max_depth=max_depth,
+        min_samples_leaf=min_samples_leaf,
+        min_samples_split=min_samples_split,
+        ccp_alpha=ccp_alpha,
+        random_state=random_state,
+    )
+    modelo.fit(X_train, np.asarray(y_train).ravel())
+
+    conjuntos = [('Train', X_train, y_train), ('Validación', X_val, y_val)]
+    if evaluar_test:
+        conjuntos.append(('Test', X_test, y_test))
+
+    filas, predicciones, errores = [], {}, {}
+    for nombre, X, y in conjuntos:
+        if len(X) == 0:
+            continue
+        pred = modelo.predict(X)
+        observado = np.asarray(y).ravel()
+        residuo = observado - pred
+        indice = y.index if isinstance(y, (pd.Series, pd.DataFrame)) else None
+        predicciones[nombre] = pd.Series(pred, index=indice, name='Predicción')
+        errores[nombre] = pd.Series(residuo, index=indice, name='Error')
+        filas.append({
+            'Conjunto': nombre,
+            'N.º de observaciones': len(observado),
+            'R²': r2_score(observado, pred) if len(observado) >= 2 else np.nan,
+            'RMSE': np.sqrt(np.mean(residuo ** 2)),
+            'MAE': np.mean(np.abs(residuo)),
+        })
+
+    tabla_metricas = pd.DataFrame(filas).set_index('Conjunto')
+    nombres = (list(X_train.columns) if isinstance(X_train, pd.DataFrame)
+               else [f'Variable {i + 1}' for i in range(modelo.n_features_in_)])
+    importancias = pd.Series(
+        modelo.feature_importances_, index=nombres, name='Importancia',
+    ).sort_values(ascending=False)
+    importancias.index.name = 'Variable'
+
+    print('\nMétricas Decision Tree:')
+    print(tabla_metricas.round(4))
+    print('\nImportancias por reducción de impureza (no son coeficientes ni p-valores):')
+    print(importancias.round(4))
+
+    return {
+        'modelo': modelo,
+        'metricas': tabla_metricas,
+        'predicciones': predicciones,
+        'errores': errores,
+        'importancias': importancias,
+    }
