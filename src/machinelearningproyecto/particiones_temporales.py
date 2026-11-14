@@ -40,7 +40,8 @@ features = [
 target = 'Rendimiento BCE'  # O: 'Bono soberano 10 años (% anual)'
 variables_pais = features + ['País ISO']
 
-def separacion_variables_entrenamiento(features, target, variables_pais, *, devolver_folds=True):
+# En modelos_variacopn_bce no se deculven 
+def separacion_variables_entrenamiento(features, target, variables_pais, *, devolver_folds=False):
     df = leer_excel()
     if target == COLUMNA:
         df = añadir_variacion(df)
@@ -161,4 +162,6 @@ Fold
 4    2022-10-31 2023-10-31    332     13
 5    2023-11-30 2024-12-31    356     14
 
-"""
+"""""
+
+
