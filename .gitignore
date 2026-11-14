@@ -218,3 +218,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# files que  no quiero que se suban
+src/machinelearningproyecto/MAL_Model_LinearRegression.py
+src/machinelearningproyecto/MAL_particiones_temporales.py
+src/machinelearningproyecto/MAL_utils.py
