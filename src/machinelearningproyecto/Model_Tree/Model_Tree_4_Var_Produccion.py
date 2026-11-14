@@ -25,7 +25,7 @@ variables_pais = features + ['País ISO']
 
 
 X_train, y_train, X_val, y_val, X_test, y_test, X_cv, y_cv, folds = particiones_temporales.separacion_variables_entrenamiento(
-    features, target, variables_pais)
+    features, target, variables_pais, devolver_folds=True)
 
 # DecisionTreeRegressor()
 
