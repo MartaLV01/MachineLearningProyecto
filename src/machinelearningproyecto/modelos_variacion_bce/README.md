@@ -1,2 +1,3 @@
-Mismos modelos que caprteas LienearREgraseio y Model_Tree pero con distintas target -> de rendimiento bce a su variacion de mes a mes
-En un futuro se supone que son estos modelos los que tendremos que utilizar para sacar conculsiones finales de nuestro proeycto.
+Mismos modelos que carpetas LinearRegression y Model_Tree pero con distintas target -> de rendimiento bce (`'Rendimiento BCE'`) a su variacion de mes a mes (`'Variación mensual Rendimiento BCE (%)'`)
+
+Tampoco estan Regularizadas
