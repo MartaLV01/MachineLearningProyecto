@@ -40,7 +40,7 @@ features = [
 target = 'Rendimiento BCE'  # O: 'Bono soberano 10 años (% anual)'
 variables_pais = features + ['País ISO']
 
-def separacion_variables_entrenamiento(features, target, variables_pais, *, devolver_folds=False):
+def separacion_variables_entrenamiento(features, target, variables_pais, *, devolver_folds=True):
     df = leer_excel()
     if target == COLUMNA:
         df = añadir_variacion(df)
