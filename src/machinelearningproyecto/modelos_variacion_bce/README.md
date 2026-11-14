@@ -1,0 +1,2 @@
+Mismos modelos que caprteas LienearREgraseio y Model_Tree pero con distintas target -> de rendimiento bce a su variacion de mes a mes
+En un futuro se supone que son estos modelos los que tendremos que utilizar para sacar conculsiones finales de nuestro proeycto.
