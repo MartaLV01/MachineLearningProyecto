@@ -13,9 +13,18 @@ from machinelearningproyecto.variacion_rendimiento_bce import COLUMNA, añadir_v
 # TODO 1: organizarlo en funciones
 # TODO 2: que cada una de las files que haga un modelo importe estas funciones
 
-def leer_excel():
-# Leer el archivo especificando la hoja correcta: 'Regresion'
-    df = pd.read_excel(Path(__file__).resolve().parents[2] / 'data' / 'euribor_datos.xlsx', sheet_name='Regresion', header=5)
+def leer_excel(nombre_archivo):
+    # Leer el archivo especificando la hoja correcta: 'Regresion'
+    #df = pd.read_excel(Path(__file__).resolve().parents[2] / 'data' / 'euribor_datos.xlsx', sheet_name='Regresion', header=5)
+    df = pd.read_excel(Path(__file__).resolve().parents[2] / 'data' / nombre_archivo, sheet_name='Regresion', header=5)
+    return df
+    #df.head(10)
+    #print(df.head(5))
+
+def leer_csv(nombre_archivo):
+    # Leer el archivo especificando la hoja correcta: 'Regresion'
+    #df = pd.read_excel(Path(__file__).resolve().parents[2] / 'data' / 'euribor_datos_variacion_1.csv', sheet_name='Regresion', header=5)
+    df = pd.read_csv(Path(__file__).resolve().parents[2] / 'data' / nombre_archivo)
     return df
     #df.head(10)
     #print(df.head(5))
@@ -41,8 +50,15 @@ target = 'Rendimiento BCE'  # O: 'Bono soberano 10 años (% anual)'
 variables_pais = features + ['País ISO']
 
 # En modelos_variacopn_bce no se deculven 
-def separacion_variables_entrenamiento(features, target, variables_pais, *, devolver_folds=False):
-    df = leer_excel()
+def separacion_variables_entrenamiento(nombre_archivo, features, target, variables_pais, *, devolver_folds=False):
+    extension_archivo = Path(nombre_archivo).suffix.lower()
+    if extension_archivo == ".xlsx":
+        df = leer_excel(nombre_archivo) # esto se usa para el archivo de aturocorrelacion/
+    elif extension_archivo == ".csv":
+        df = leer_csv(nombre_archivo) # esto es para los archivos de las otras carpetas
+    else:
+        raise ValueError(f"Formato de archivo no soportado: {extension_archivo}")
+    
     if target == COLUMNA:
         df = añadir_variacion(df)
     # 1. Preparación: conservar juntos todos los países del mismo mes.
