@@ -7,3 +7,5 @@ Estan Regularizados:
 
 Cada file se runea con `uv run nombrefile.py` (estando en el directorio correspondiente)
 
+**Modelo antiguo -> HAY QUE ACTUALIZARLO!!!**
+**No esta actualizado con la variable 'Rendimiento cupon 0 mes anterior'. Ni corregido funcion separacion variables**

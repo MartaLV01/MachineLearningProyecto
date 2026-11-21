@@ -6,6 +6,12 @@ No estan regularizados
 Se ejecutan con el `uv run nombrefile.py` Estando en el directorio correspondiente
 
 
+**ESTAOS RESULTADOS NO ESTAN ACTUALIZADOS!!!**
+
+**PARA VER LOS RESULTADOS IR A CADA UNA DE LAS FILES PARA VER SUS PARAMETROS**
+
+**LOS RESULTADOS NO ESTAN ACTUALIZADOS TAMPOCO EN LAS FILES**
+
 ## `Model_RandomTree_2Var.py`
 **Variables usadas:**
 

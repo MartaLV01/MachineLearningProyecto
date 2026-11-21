@@ -5,6 +5,8 @@ No estan regularizados
 
 Se ejecutan con el `uv run nombrefile.py` Estando en el directorio correspondiente
 
+**Modelo antiguo**
+**No esta actualizado con la variable 'Rendimiento cupon 0 mes anterior'. Ni corregido funcion separacion variables**
 
 ## `Model_Decision_Tree_2_Var.py`
 **Variables usadas:**

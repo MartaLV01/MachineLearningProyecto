@@ -5,6 +5,11 @@ No estan regularizados
 
 Cada file se runea con `uv run nombrefile.py` (estando en el directorio correspondiente)
 
+**ESTAOS RESULTADOS NO ESTAN ACTUALIZADOS!!!**
+
+**PARA VER LOS RESULTADOS IR A CADA UNA DE LAS FILES PARA VER SUS PARAMETROS**
+
+**LOS RESULTADOS NO ESTAN ACTUALIZADOS TAMPOCO EN LAS FILES**
 
 ## `Model_LinearRegression_2Var.py`
 **Variables usadas:**
