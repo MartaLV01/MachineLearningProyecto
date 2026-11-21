@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 import statsmodels.api as sm
+from pathlib import Path
+
 
 from sklearn.linear_model import LinearRegression
 from machinelearningproyecto import particiones_temporales
@@ -12,13 +14,18 @@ from machinelearningproyecto import modelos
 features = [
     'Títulos públicos (% PIB, mensual)',
     'Euríbor 12M (% anual)',
+    'Rendimiento cupon 0 mes anterior'
 ]
-target = 'Rendimiento BCE'  # O: 'Bono soberano 10 años (% anual)'
+
+# ANTES: target = 'Rendimiento BCE'  # O: 'Bono soberano 10 años (% anual)'
+target = 'Rendimiento cupon 0'
 variables_pais = features + ['País ISO']
+
+archivo =  'euribor_datos_variacion_1.csv'
 
 
 X_train, y_train, X_val, y_val, X_test, y_test, X_cv, y_cv, folds = particiones_temporales.separacion_variables_entrenamiento(
-    features, target, variables_pais, devolver_folds=True)
+    archivo, features, target, variables_pais, devolver_folds=True)
 
 
 """
@@ -29,49 +36,45 @@ modelos.model_OLS(X_train, y_train, X_val, y_val, X_test, y_test, X_cv, y_cv)
 
 
 """
+DIVISIÓN TEMPORAL TRAIN / VALIDACIÓN / TEST
+  Conjunto  Filas     Inicio        Fin
+     Train   1255 2010-07-31 2023-07-31
+Validación    433 2023-08-31 2024-12-31
+      Test    461 2025-01-31 2026-07-31
+
+CINCO BLOQUES DE VALIDACIÓN ORIGINALES
+         Inicio        Fin  Filas  Meses
+Fold                                    
+1    2010-07-31 2020-05-31    328     92
+2    2020-06-30 2021-08-31    358     15
+3    2021-09-30 2022-09-30    317     13
+4    2022-10-31 2023-11-30    356     14
+5    2023-12-31 2024-12-31    329     13
 Tabla de coeficientes:
-                                        b  Error estándar        t  p-valor  IC 95% inferior  IC 95% superior  Significativo al 5%
-Variable                                                                                                                          
-const                              0.3995          0.1052   3.7983   0.0002           0.1932           0.6059                 True
-Títulos públicos (% PIB, mensual)  0.0005          0.0017   0.2992   0.7648          -0.0028           0.0038                False
-Euríbor 12M (% anual)              0.4471          0.0276  16.2214   0.0000           0.3930           0.5011                 True
+                                        b  Error estándar         t  p-valor  IC 95% inferior  IC 95% superior  Significativo al 5%
+Variable                                                                                                                           
+const                             -0.0027          0.0208   -0.1283   0.8979          -0.0434           0.0381                False
+Títulos públicos (% PIB, mensual)  0.0003          0.0003    0.9030   0.3667          -0.0004           0.0010                False
+Euríbor 12M (% anual)              0.0504          0.0058    8.7149   0.0000           0.0390           0.0617                 True
+Rendimiento cupon 0 mes anterior   0.9925          0.0056  178.6322   0.0000           0.9816           1.0034                 True
 
 Métricas del modelo:
-                          Valor
-Métrica                        
-N.º de observaciones  1296.0000
-R² entrenamiento         0.1699
-R² ajustado              0.1686
-F                      132.2815
-p-valor de F             0.0000
-Durbin-Watson            1.8601
-RMSE entrenamiento       1.5569
-MAE entrenamiento        1.0130
-AIC                   4831.2762
-BIC                   4846.7773
+                           Valor
+Métrica                         
+N.º de observaciones   1255.0000
+R² entrenamiento          0.9688
+R² ajustado               0.9687
+F                     12947.5602
+p-valor de F              0.0000
+Durbin-Watson             1.9963
+RMSE entrenamiento        0.2996
+MAE entrenamiento         0.1029
+AIC                     543.9874
+BIC                     564.5270
 
-                                           b  Error estándar          t  ...  IC 95% inferior  IC 95% superior  Significativo al 5%
-Variable                                                                ...                                                       
-const                              0.399512        0.105182   3.798291  ...         0.193166         0.605859                 True
-Títulos públicos (% PIB, mensual)  0.000508        0.001697   0.299205  ...        -0.002821         0.003837                False
-Euríbor 12M (% anual)              0.447080        0.027561  16.221370  ...         0.393010         0.501149                 True
-
-[3 rows x 7 columns]
-                             Valor
-Métrica                           
-N.º de observaciones  1.296000e+03
-R² entrenamiento      1.698570e-01
-R² ajustado           1.685729e-01
-F                     1.322815e+02
-p-valor de F          5.399552e-53
-Durbin-Watson         1.860108e+00
-RMSE entrenamiento    1.556851e+00
-MAE entrenamiento     1.013037e+00
-AIC                   4.831276e+03
-BIC                   4.846777e+03
+Tabla de validacion
                     Valor
-R² validación   -0.215670
-RMSE validación  2.307281
-MAE validación   1.920788
-
+R² validación    0.942707
+RMSE validación  0.501470
+MAE validación   0.242386
 """

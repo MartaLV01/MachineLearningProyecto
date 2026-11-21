@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import statsmodels.api as sm
+from pathlib import Path
 
 from sklearn.linear_model import LinearRegression
 from machinelearningproyecto import particiones_temporales
@@ -14,13 +15,16 @@ features = [
     'Euríbor 12M (% anual)',
     'Inflación HICP interanual (%)',
     'IPP país (2021=100)',
+    'Rendimiento cupon 0 mes anterior'
 ]
-target = 'Rendimiento BCE'  # O: 'Bono soberano 10 años (% anual)'
+# ANTES: target = 'Rendimiento BCE'  # O: 'Bono soberano 10 años (% anual)'
+target = 'Rendimiento cupon 0'
 variables_pais = features + ['País ISO']
 
+archivo = 'euribor_datos_variacion_1.csv'
 
 X_train, y_train, X_val, y_val, X_test, y_test, X_cv, y_cv, folds = particiones_temporales.separacion_variables_entrenamiento(
-    features, target, variables_pais, devolver_folds=True)
+    archivo, features, target, variables_pais, devolver_folds=True)
 
 
 """
@@ -30,53 +34,47 @@ HECHO PARA EL TRAIN
 modelos.model_OLS(X_train, y_train, X_val, y_val, X_test, y_test, X_cv, y_cv)
 
 """
+DIVISIÓN TEMPORAL TRAIN / VALIDACIÓN / TEST
+  Conjunto  Filas     Inicio        Fin
+     Train   1255 2010-07-31 2023-07-31
+Validación    433 2023-08-31 2024-12-31
+      Test    461 2025-01-31 2026-07-31
+
+CINCO BLOQUES DE VALIDACIÓN ORIGINALES
+         Inicio        Fin  Filas  Meses
+Fold                                    
+1    2010-07-31 2020-05-31    328     92
+2    2020-06-30 2021-08-31    358     15
+3    2021-09-30 2022-09-30    317     13
+4    2022-10-31 2023-11-30    356     14
+5    2023-12-31 2024-12-31    329     13
 Tabla de coeficientes:
-                                        b  Error estándar        t  p-valor  IC 95% inferior  IC 95% superior  Significativo al 5%
-Variable                                                                                                                          
-const                              2.4108          0.3430   7.0287   0.0000           1.7379           3.0837                 True
-Títulos públicos (% PIB, mensual)  0.0023          0.0017   1.3592   0.1743          -0.0010           0.0056                False
-Euríbor 12M (% anual)              0.4718          0.0372  12.6898   0.0000           0.3989           0.5447                 True
-Inflación HICP interanual (%)      0.1334          0.0167   7.9813   0.0000           0.1006           0.1662                 True
-IPP país (2021=100)               -0.0254          0.0037  -6.9057   0.0000          -0.0326          -0.0182                 True
+                                        b  Error estándar         t  p-valor  IC 95% inferior  IC 95% superior  Significativo al 5%
+Variable                                                                                                                           
+const                             -0.0501          0.0698   -0.7179   0.4730          -0.1871           0.0868                False
+Títulos públicos (% PIB, mensual)  0.0005          0.0003    1.3878   0.1655          -0.0002           0.0011                False
+Euríbor 12M (% anual)              0.0361          0.0078    4.6406   0.0000           0.0208           0.0513                 True
+Inflación HICP interanual (%)      0.0077          0.0034    2.2500   0.0246           0.0010           0.0144                 True
+IPP país (2021=100)                0.0001          0.0007    0.1634   0.8702          -0.0013           0.0016                False
+Rendimiento cupon 0 mes anterior   0.9912          0.0056  175.7650   0.0000           0.9801           1.0022                 True
 
 Métricas del modelo:
                           Valor
 Métrica                        
-N.º de observaciones  1296.0000
-R² entrenamiento         0.2102
-R² ajustado              0.2077
-F                       85.8751
+N.º de observaciones  1255.0000
+R² entrenamiento         0.9691
+R² ajustado              0.9690
+F                     7839.4664
 p-valor de F             0.0000
-Durbin-Watson            1.8643
-RMSE entrenamiento       1.5186
-MAE entrenamiento        0.9639
-AIC                   4770.7836
-BIC                   4796.6188
+Durbin-Watson            2.0101
+RMSE entrenamiento       0.2980
+MAE entrenamiento        0.1069
+AIC                    534.9891
+BIC                    565.7985
 
-                                           b  Error estándar          t  ...  IC 95% inferior  IC 95% superior  Significativo al 5%
-Variable                                                                ...                                                       
-const                              2.410804        0.342995   7.028692  ...         1.737916         3.083693                 True
-Títulos públicos (% PIB, mensual)  0.002280        0.001677   1.359181  ...        -0.001011         0.005571                False
-Euríbor 12M (% anual)              0.471804        0.037180  12.689790  ...         0.398864         0.544743                 True
-Inflación HICP interanual (%)      0.133385        0.016712   7.981296  ...         0.100599         0.166171                 True
-IPP país (2021=100)               -0.025425        0.003682  -6.905710  ...        -0.032648        -0.018202                 True
-
-[5 rows x 7 columns]
-                             Valor
-Métrica                           
-N.º de observaciones  1.296000e+03
-R² entrenamiento      2.101562e-01
-R² ajustado           2.077089e-01
-F                     8.587509e+01
-p-valor de F          9.965271e-65
-Durbin-Watson         1.864316e+00
-RMSE entrenamiento    1.518592e+00
-MAE entrenamiento     9.639442e-01
-AIC                   4.770784e+03
-BIC                   4.796619e+03
+Tabla de validacion
                     Valor
-R² validación   -0.729721
-RMSE validación  2.752204
-MAE validación   2.214354
-
+R² validación    0.945743
+RMSE validación  0.487999
+MAE validación   0.204826
 """
