@@ -80,8 +80,9 @@ def model_OLS(X_train, y_train, X_val, y_val, X_test, y_test, X_cv, y_cv):
     }, name="Valor").to_frame()
 
 
-    print("\n", tabla_coeficientes)
-    print(tabla_metricas)
+    #print("\n", tabla_coeficientes)
+    #print(tabla_metricas)
+    print("\nTabla de validacion")
     print(tabla_validacion)
 
 
