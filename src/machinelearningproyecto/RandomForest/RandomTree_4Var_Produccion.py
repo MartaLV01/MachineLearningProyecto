@@ -183,3 +183,74 @@ tabla_importancias_rf
 3       IPI variación interanual (%)     0.091320
 
 """
+
+"""
+Al hacerlo con (es loa ctual de la file):
+ target = 'Rendimiento cupon 0'
+ archivo =  'euribor_datos_variacion_1.csv'
+y añadir a features: 'Rendimiento cupon 0 mes anterior'
+
+$ uv run RandomTree_4Var_Produccion.py
+\MachineLearningProyecto\src\machinelearningproyecto\particiones_temporales.py:66: UserWarning: Parsing dates in %Y-%m-%d format when dayfirst=True was specified. Pass `dayfirst=False` or specify a format to silence this warning.
+  datos['Fecha'] = pd.to_datetime(datos['Fecha'], dayfirst=True, errors='coerce')
+
+DIVISIÓN TEMPORAL TRAIN / VALIDACIÓN / TEST
+  Conjunto  Filas     Inicio        Fin
+     Train   1255 2010-07-31 2023-07-31
+Validación    433 2023-08-31 2024-12-31
+      Test    461 2025-01-31 2026-07-31
+
+CINCO BLOQUES DE VALIDACIÓN ORIGINALES
+         Inicio        Fin  Filas  Meses
+Fold                                    
+1    2010-07-31 2020-05-31    328     92
+2    2020-06-30 2021-08-31    358     15
+3    2021-09-30 2022-09-30    317     13
+4    2022-10-31 2023-11-30    356     14
+5    2023-12-31 2024-12-31    329     13
+
+MODELOS
+      rank_test_score   CV_RMSE    CV_STD  TRAIN_RMSE                                             params
+134                1  0.612496  0.287898    0.197597  {'max_depth': 10, 'min_samples_leaf': 1, 'min_...
+218                2  0.613051  0.287896    0.197289  {'max_depth': 20, 'min_samples_leaf': 1, 'min_...
+260                3  0.613051  0.287896    0.197289  {'max_depth': 50, 'min_samples_leaf': 1, 'min_...
+8                  3  0.613051  0.287896    0.197289  {'max_depth': None, 'min_samples_leaf': 1, 'mi...
+176                5  0.613057  0.287897    0.197290  {'max_depth': 15, 'min_samples_leaf': 1, 'min_...
+135                6  0.614548  0.290441    0.197548  {'max_depth': 10, 'min_samples_leaf': 1, 'min_...
+177                7  0.614781  0.290588    0.197359  {'max_depth': 15, 'min_samples_leaf': 1, 'min_...
+261                8  0.614810  0.290592    0.197357  {'max_depth': 50, 'min_samples_leaf': 1, 'min_...
+219                9  0.614810  0.290592    0.197357  {'max_depth': 20, 'min_samples_leaf': 1, 'min_...
+9                 10  0.614810  0.290592    0.197357  {'max_depth': None, 'min_samples_leaf': 1, 'mi...
+
+MEJORES RESULTADOS
+Mejores hiperparámetros: {'max_depth': 10, 'min_samples_leaf': 1, 'min_samples_split': 30, 'n_estimators': 200}
+Mejor RMSE: 0.6124955274933629
+Mejor estimador: RandomForestRegressor(max_depth=10, min_samples_split=30, n_estimators=200,
+                      n_jobs=-1, random_state=42)
+
+MÉTRICAS DE ENTRENAMIENTO
+R2      0.979258
+RMSE    0.244254
+MAE     0.088855
+dtype: float64
+
+MÉTRICAS DE VALIDACIÓN
+R2      0.923471
+RMSE    0.579569
+MAE     0.232263
+dtype: float64
+
+tabla_metricas_rf
+               N.º de observaciones        R²      RMSE       MAE
+Conjunto                                                         
+Entrenamiento                  1255  0.979258  0.244254  0.088855
+Validación                      433  0.923471  0.579569  0.232263
+
+tabla_importancias_rf
+                            Variable  Importancia
+0   Rendimiento cupon 0 mes anterior     0.988444
+1              Euríbor 12M (% anual)     0.006787
+2  Títulos públicos (% PIB, mensual)     0.002030
+3                 Desempleo país (%)     0.001545
+4       IPI variación interanual (%)     0.001195
+"""
