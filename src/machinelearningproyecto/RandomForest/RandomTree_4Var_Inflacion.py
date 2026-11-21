@@ -18,15 +18,19 @@ features = [
     'Euríbor 12M (% anual)',
     'Inflación HICP interanual (%)',
     'IPP país (2021=100)',
+    'Rendimiento cupon 0 mes anterior'
 ]
-target = 'Rendimiento BCE'  # O: 'Bono soberano 10 años (% anual)'
+# ANTES: target = 'Rendimiento BCE'  # O: 'Bono soberano 10 años (% anual)'
+target = 'Rendimiento cupon 0'
 variables_pais = features + ['País ISO']
 
+archivo =  'euribor_datos_variacion_1.csv'
+
 X_train, y_train, X_val, y_val, X_test, y_test, X_cv, y_cv, folds = particiones_temporales.separacion_variables_entrenamiento(
-    features, target, variables_pais, devolver_folds=True)
+    archivo, features, target, variables_pais, devolver_folds=True)
 
 randomforest_param_grid = {
-    "n_estimators": [300, 500], # Número de árboles.
+    "n_estimators": [200, 400], # Número de árboles.
     "max_depth": [None, 3, 5, 10, 15, 20, 50], # Límite de profundidad.
     "min_samples_leaf": [1, 5, 10],
     # "preprocessing__high_card__min_frequency": [20],
